@@ -16,11 +16,12 @@
   <link rel="stylesheet" media="screen" href="extensions/navigation/deck.navigation.css">
   <link rel="stylesheet" media="screen" href="extensions/status/deck.status.css">
   <link rel="stylesheet" media="screen" href="extensions/scale/deck.scale.css">
-  <link href="//www.mozilla.org/tabzilla/media/css/tabzilla.css" rel="stylesheet" />
+  <link rel="stylesheet" media="screen" href="extensions/codemirror/deck.codemirror.css">
 
   <!-- Style theme. More available in /themes/style/ or create your own. -->
   <link rel="stylesheet" media="screen" href="themes/style/mozilla-sandstone-nightly.css">
   <link rel="stylesheet" media="screen" href="themes/style/custom.css">
+  <link rel="stylesheet" media="screen" href="extensions/codemirror/themes/night.css">
 
   <!-- Transition theme. More available in /themes/transition/ or create your own. -->
   <link rel="stylesheet" media="screen" href="themes/transition/horizontal-slide.css">
@@ -29,7 +30,7 @@
   <link rel="stylesheet" media="print" href="core/print.css">
 
   <!-- Required Modernizr file -->
-  <script src="modernizr.custom.js"></script>
+  <script type="application/javascript;version=1.7" src="modernizr.custom.js"></script>
 </head>
 <body>
 
@@ -42,6 +43,10 @@
 
     <section class="slide">
       <h1>Quick introduction and disclaimer</h1>
+    </section>
+
+    <section class="slide">
+      <h1>I assume webdev familiarity of JS and the DOM</h1>
     </section>
 
     <section class="slide">
@@ -65,6 +70,30 @@
     <section class="slide">
       <h1>Ask questions!</h1>
     </section>
+
+    <section class="slide">
+      <h2>Prototype-based inheritence</h2>
+      <ul>
+        <li class="slide">Usually abstracted away by libraries like Underscore.js or lodash</li>
+        <li class="slide">Typical approach to defining a "class":
+          <textarea class="slide code" mode="javascript" style="display: none;" runnable="true">
+            function Animal(sound) {
+              this.sound = sound;
+            }
+
+            Animal.prototype = {
+              speak() {
+                console.log(this.sound);
+              }
+            };
+
+            let a = new Animal('quack');
+            a.speak();
+            // "quack"
+          </textarea>
+        </li>
+    </section>
+
 
     <!-- End slides. -->
 
@@ -95,20 +124,35 @@
   </div>
 
 <!-- Required JS files. -->
-<script src="jquery.min.js"></script>
-<script src="core/deck.core.js"></script>
+<script type="application/javascript;version=1.8" src="jquery.min.js"></script>
+<script type="application/javascript;version=1.8" src="core/deck.core.js"></script>
 
 <!-- Extension JS files. Add or remove as needed. -->
-<script src="extensions/menu/deck.menu.js"></script>
-<script src="extensions/goto/deck.goto.js"></script>
-<script src="extensions/status/deck.status.js"></script>
-<script src="extensions/navigation/deck.navigation.js"></script>
-<script src="extensions/scale/deck.scale.js"></script>
-<script src="extensions/navigation/jquery.hotkeys.js"></script>
+<script type="application/javascript;version=1.8" src="extensions/menu/deck.menu.js"></script>
+<script type="application/javascript;version=1.8" src="extensions/goto/deck.goto.js"></script>
+<script type="application/javascript;version=1.8" src="extensions/status/deck.status.js"></script>
+<script type="application/javascript;version=1.8" src="extensions/navigation/deck.navigation.js"></script>
+<script type="application/javascript;version=1.8" src="extensions/scale/deck.scale.js"></script>
+<script type="application/javascript;version=1.8" src="extensions/navigation/jquery.hotkeys.js"></script>
 
+<!-- Base codemiror code -->
+<script type="application/javascript;version=1.8" src="extensions/codemirror/codemirror.js"></script>
+
+<!-- Syntax highlighting Modes -->
+
+<!-- javascript -->
+<script type="application/javascript;version=1.8" src="extensions/codemirror/mode/javascript/javascript.js"></script>
+
+<!-- html mode (note html mode requires xml, css and javascript) -->
+<script type="application/javascript;version=1.8" src="extensions/codemirror/mode/xml/xml.js"></script>
+<script type="application/javascript;version=1.8" src="extensions/codemirror/mode/css/css.js"></script>
+<script type="application/javascript;version=1.8" src="extensions/codemirror/mode/htmlmixed/htmlmixed.js"></script>
+
+<!-- Plugin code -->
+<script type="application/javascript;version=1.8" src="extensions/codemirror/deck.codemirror.js"></script>
 
 <!-- Initialize the deck. You can put this in an external file if desired. -->
-<script>
+<script type="application/javascript;version=1.8">
   $(function() {
    $(document).bind("keydown", "ctrl+f", function() {
       if (!document.mozFullScreenElement) {
