@@ -120,11 +120,11 @@
         if (opts.codemirror.runnable || codeblock.attr("runnable")) {
           // make the code runnable
           var wrapper = editor.getWrapperElement(),
-              button  = $('<div>', {
+              button  = $('<button>', {
                 "class" : "button",
                 text : "Run"
               }).prependTo(wrapper),
-              clearButton  = $('<div>', {
+              clearButton  = $('<button>', {
                 "class" : "button clear",
                 text : "Clear"
               }).prependTo(wrapper),

@@ -16,6 +16,7 @@
   <link rel="stylesheet" media="screen" href="extensions/navigation/deck.navigation.css">
   <link rel="stylesheet" media="screen" href="extensions/status/deck.status.css">
   <link rel="stylesheet" media="screen" href="extensions/scale/deck.scale.css">
+  <link rel="stylesheet" media="screen" href="extensions/codemirror/themes/codemirror.css">
   <link rel="stylesheet" media="screen" href="extensions/codemirror/deck.codemirror.css">
 
   <!-- Style theme. More available in /themes/style/ or create your own. -->
@@ -77,19 +78,18 @@
         <li class="slide">Usually abstracted away by libraries like Underscore.js or lodash</li>
         <li class="slide">Typical approach to defining a "class":
           <textarea class="slide code" mode="javascript" style="display: none;" theme="night" runnable="true">
-            function Animal(sound) {
-              this.sound = sound;
-            }
+function Animal(sound) {
+  this.sound = sound;
+}
 
-            Animal.prototype = {
-              speak() {
-                console.log(this.sound);
-              }
-            };
+Animal.prototype = {
+  speak() { // ES6 style
+    console.log(this.sound);
+  }
+};
 
-            let a = new Animal('quack');
-            a.speak();
-            // "quack"
+let a = new Animal('quack');
+a.speak();
           </textarea>
         </li>
     </section>
