@@ -74,10 +74,10 @@
     </section>
 
     <section class="slide">
-      <h2>Prototype-based inheritence</h2>
+      <h2>Prototype-based inheritence...</h2>
       <ul>
         <li class="slide">Usually abstracted away by libraries like Underscore.js or lodash</li>
-        <li class="slide">Typical approach to defining a "class":
+        <li class="slide">Typical approach for defining a "class":
           <textarea class="slide code" mode="javascript" style="display: none;" theme="night" runnable="true">
 function Animal(sound) {
   this.sound = sound;
@@ -96,6 +96,38 @@ a.speak();
     </section>
 
 
+    <section class="slide">
+      <h2>Prototype-based inheritence...</h2>
+      <ul>
+        <li class="slide">Now let's extend this class a bit.
+          <textarea class="slide code" mode="javascript" style="display: none;" theme="night" runnable="true">
+function Animal(sound) {
+  this.sound = sound;
+}
+
+Animal.prototype = {
+  speak() { // ES6 style
+    console.log(this.sound);
+  }
+};
+
+function Duck(name) {
+  Animal.call(this, "quack");
+  this.name = name;
+}
+
+Duck.prototype = Object.create(Animal.prototype);
+Duck.prototype.greet = function(who) {
+  console.log(`Hello ${who}, I'm a duck and my name is ${this.name}. ${this.sound}!`);
+  // I'm using a ES6 template string here --^
+}
+
+let d = new Duck("Howard");
+d.speak();
+//d.greet("Mike");
+          </textarea>
+        </li>
+    </section>
     <!-- End slides. -->
 
     <!-- Begin extension snippets. Add or remove as needed. -->
