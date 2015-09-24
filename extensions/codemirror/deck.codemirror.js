@@ -156,18 +156,23 @@
 
           clearButton.click(function(editor, output){
             return function(event) {
+              if (iframe) {
+                iframe.remove();
+              }
               output.html('');
             };
           }(editor, output));
 
           var iframe;
 
+          $(document).bind('deck.change', function() {
+            if (iframe) {
+              iframe.remove();
+            }
+          });
+
           button.click(function(editor, output){
             return function(event) {
-
-              // save the default logging behavior.
-              var real_console_log = console.log;
-              
               // save the default logging behavior.
               // Following Dean Edward's fantastic sandbox code:
               // http://dean.edwards.name/weblog/2006/11/sandbox/+evaluating+js+in+an+iframe
