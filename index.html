@@ -55,7 +55,7 @@
       <h2>Today's objectives</h2>
         <ul>
           <li class="slide">Write code which uses prototype-based inheritance</li>
-          <li class="slide">Understand and use <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let" target="_blank">let</a> and <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of" target="_blank">for...of</a></li>
+          <li class="slide">Understand and use <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let" target="_blank"><code>let</code></a> and <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of" target="_blank"><code>for...of</code></a></li>
           <li class="slide"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment" target="_blank">Array and object destructuring</a></li>
           <li class="slide"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Worker" target="_blank">Workers</a></li>
           <li class="slide"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise" target="_blank">Promises</a> and <a href="https://developer.mozilla.org/en-US/docs/Mozilla/JavaScript_code_modules/Task.jsm" target="_blank">Task.jsm</a></li>
@@ -74,8 +74,10 @@
       <h1>Ask questions!</h1>
     </section>
 
+    <!-- SECTION: OOP / Prototype inheritance -->
+
     <section class="slide">
-      <h2>Prototype-based inheritence...</h2>
+      <h2>Prototype-based inheritance...</h2>
       <ul>
         <li class="slide">Usually abstracted away by libraries like Underscore.js or lodash</li>
         <li class="slide">Typical approach for defining a "class":
@@ -96,9 +98,8 @@ a.speak();
         </li>
     </section>
 
-
     <section class="slide">
-      <h2>Prototype-based inheritence...</h2>
+      <h2>Prototype-based inheritance...</h2>
       <ul>
         <li class="slide">Now let's extend this class a bit.
           <textarea class="code" mode="javascript" style="display: none;" theme="cobalt" runnable="true">
@@ -133,6 +134,53 @@ d.speak();
         <li class="slide"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Inheritance_and_the_prototype_chain" target="_blank">On inheritance in Javascript.</a></li>
         <li class="slide"><a href="https://medium.com/javascript-scene/common-misconceptions-about-inheritance-in-javascript-d5d9bab29b0a" target="_blank">JS OOP gotchas, and an argument against inheritance.</a></li>
     </section>
+
+    <!-- SECTION: let -->
+    <section class="slide">
+      <h2>let</h2>
+      <ul>
+        <li class="slide"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let" target="_blank">Here's a link to some more comprehensive documentation</a></li>
+        <li class="slide">In the beginning, there was <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/var" target="_blank"><code>var</code></a>. And it was alright... but there are some interesting gotchas.</li>
+        <li class="slide"><code>var</code> is function scoped, whereas <code>let</code> is block scoped.
+          <textarea class="code" mode="javascript" style="display: none;" theme="cobalt" runnable="true">
+(function scope() {
+  var baz = "Plz don't overwrite me."
+  { // <-- this could be a block for a conditional, a loop, etc...
+    var baz = "blam!";
+    console.log(baz);
+  }
+
+  console.log(baz);
+}());
+
+// This has interesting consequences for for-loop binding
+// doing async things - example:
+/*
+for (var i = 0; i < 3; ++i) {
+  setTimeout(function() {
+    console.log(i);
+  }, 50);
+}*/
+          </textarea>
+        </li>
+        <li class="slide">Other gotchas...
+          <textarea class="code" mode="javascript" style="display: none;" theme="cobalt" runnable="true">
+// var's can be redeclared, whereas let's cannot.
+var x = 1;
+var x = 2;
+
+// var hoists! let does not.
+/*
+(function() {
+  console.log(foo);
+  var foo = "The above will result in undefined, not a ReferenceError";
+}());
+*/
+          </textarea>
+        </li>
+    </section>
+
+
     <!-- End slides. -->
 
     <!-- Begin extension snippets. Add or remove as needed. -->

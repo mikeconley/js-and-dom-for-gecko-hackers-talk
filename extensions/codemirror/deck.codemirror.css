@@ -9,5 +9,12 @@
   font-weight: normal;
   font-size: 0.8em;
   height: 100%; }
+  .deck-container .slide .CodeMirror .button {
+    font-size: 1.0em;
+    margin-bottom: 5px;
+    opacity: 0.2;
+    transition: opacity 200ms; }
+  .deck-container .slide .CodeMirror .button:hover {
+    opacity: 1.0; }
 
 /*# sourceMappingURL=deck.codemirror.css.map */

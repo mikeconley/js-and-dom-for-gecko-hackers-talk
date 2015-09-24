@@ -11,5 +11,17 @@
     font-weight: normal;
     font-size: 0.8em;
     height: 100%;
+
+    .button {
+      font-size: 1.0em;
+      margin-bottom: 5px;
+      opacity: 0.2;
+      transition: opacity 50ms;
+    }
+
+    .button:hover {
+      opacity: 1.0;
+    }
+
   }
 }

@@ -72,6 +72,28 @@
       });
     });
 
+    var real_console_log = console.log;
+
+    // Overwrite the default log behavior to pipe to an output element.
+    console.log = function(...args) {
+      var output = $.deck('getSlide').find('.deck-codemirror-result');
+      if (!output.length) {
+        return;
+      }
+      var messages = [];
+      // Convert all arguments to Strings (Objects will be JSONified).
+      for (var i = 0; i < args.length; i++) {
+        var value = arguments[i];
+        messages.push(typeof(value) == 'object' ? JSON.stringify(value) : String(value));
+      }
+      var msg = messages.join(" ");
+      if (output.html() !== "") {
+        output.append("<br />" + msg);
+      } else {
+        output.html(msg);
+      }
+    };
+
     // go through all code blocks
     $.each(codeblocks, function(i, codeblock) {
 
@@ -138,6 +160,8 @@
             };
           }(editor, output));
 
+          var iframe;
+
           button.click(function(editor, output){
             return function(event) {
 
@@ -148,27 +172,14 @@
               // Following Dean Edward's fantastic sandbox code:
               // http://dean.edwards.name/weblog/2006/11/sandbox/+evaluating+js+in+an+iframe
               // create an iframe sandbox for this element.
-              var iframe = $("<iframe>")
+              if (iframe) {
+                iframe.remove();
+              }
+              iframe = $("<iframe>")
                 .css("display", "none")
                 .appendTo($d.find('body'));
 
               // Overwrite the default log behavior to pipe to an output element.
-
-              // Overwrite the default log behavior to pipe to an output element.
-              console.log = function() {
-                var messages = [];
-                // Convert all arguments to Strings (Objects will be JSONified).
-                for (var i = 0; i < arguments.length; i++) {
-                  var value = arguments[i];
-                  messages.push(typeof(value) == 'object' ? JSON.stringify(value) : String(value));
-                }
-                var msg = messages.join(" ");
-                if (output.html() !== "") {
-                  output.append("<br />" + msg);
-                } else {
-                    output.html(msg);
-                }
-              };
 
               var sandBoxMarkup = "<script type='application/javascript;version=1.8'>"+
                 "var MSIE/*@cc_on =1@*/;"+ // sniff
@@ -208,12 +219,6 @@
 
               // eval in the sandbox.
               sandbox.eval(combinedSource);
-
-              // get rid of the frame. New Frame for every context.
-              iframe.remove();
-              
-              // set the old logging behavior back.
-              console.log = real_console_log;
             }
           }(editor, output));
         }
