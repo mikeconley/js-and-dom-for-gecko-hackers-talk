@@ -1,0 +1,17 @@
+{
+  "name": "js-and-dom-for-gecko-hackers-talk",
+  "version": "0.0.1",
+  "description": "JS and DOM for Gecko Hackers Talk",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mikeconley/js-and-dom-for-gecko-hackers-talk.git"
+  },
+  "author": "Mike Conley <mconley@mozilla.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mikeconley/js-and-dom-for-gecko-hackers-talk/issues"
+  },
+  "devDependencies": {
+    "gulp-rsync": "0.0.5"
+  }
+}
