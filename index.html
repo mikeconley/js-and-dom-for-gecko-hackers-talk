@@ -279,7 +279,51 @@ myFunction({
 </textarea></li>
     </section>
 
+    <section class="slide">
+      <h2>Workers</h2>
+      <ul>
+        <li class="slide">JavaScript is single-threaded, and runs on the main-thread</li>
+        <li class="slide">Good: access to DOM!</li>
+        <li class="slide">Bad: able to block the main thread, which results in jank / hangs, even during "async" operations</li>
+        <li class="slide">Moving process-heavy things off the main thread is good for responsiveness</li>
+        <li class="slide">Workers allow actual concurrency in JavaScript, with some limitations</li>
+      <textarea class="code" mode="javascript" style="display: none;" theme="cobalt" runnable="true">
+function workerFunc() {
+  var d = Date.now();
+  console.log("Starting...");
+  while(Date.now() - d < 2000) {}
+  console.log("Done waiting 2 seconds!");
+  /* ^-- this will output to the devtools console */
+}
 
+let w = new Worker(`data:,(${workerFunc.toString()})();`);
+
+// Normally workers are defined in separate scripts, like this:
+// let w = new Worker("some_worker.js");
+</textarea></li>
+    </section>
+
+    <section class="slide">
+      <h2>Communicating with Workers</h2>
+      <ul>
+        <li class="slide">JavaScript is single-threaded, and runs on the main-thread</li>
+      </ul>
+    </section>
+
+    <section class="slide">
+      <h2>Worker limitations</h2>
+      <ul>
+        <li class="slide">JavaScript is single-threaded, and runs on the main-thread</li>
+      </ul>
+    </section>
+
+
+    <section class="slide">
+      <h2>ChromeWorkers</h2>
+      <ul>
+        <li class="slide">JavaScript is single-threaded, and runs on the main-thread</li>
+      </ul>
+    </section>
 
 
     <!-- End slides. -->
