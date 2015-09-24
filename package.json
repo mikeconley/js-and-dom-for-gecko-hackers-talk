@@ -12,6 +12,7 @@
     "url": "https://github.com/mikeconley/js-and-dom-for-gecko-hackers-talk/issues"
   },
   "devDependencies": {
-    "gulp-rsync": "0.0.5"
+    "gulp-rsync": "0.0.5",
+    "gulp": "~3.9.0"
   }
 }
