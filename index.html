@@ -62,8 +62,8 @@
           <li class="slide"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions" target="_blank">Arrow functions</a></li>
           <li class="slide"><a href="https://developer.mozilla.org/en-US/docs/Tools/Browser_Toolbox" target="_blank">The Browser Toolbox</a></li>
           <li class="slide">Profiling</li>
-          <li class="slide">Writing restartless add-ons with the <a href="https://developer.mozilla.org/en-US/Add-ons/SDK">SDK</a></li>
-          <li class="slide">Using page-mods to alter a site in an add-on</li>
+          <li class="slide">Writing restartless extensions with the <a href="https://developer.mozilla.org/en-US/Add-ons/SDK">SDK</a></li>
+          <li class="slide">Using page-mods to alter a site in an extension</li>
           <li class="slide">Debugging an extension</li>
           <li class="slide">Testing Gecko</li>
           <li class="slide">Writing a "browser chrome" mochitest</li>
@@ -94,7 +94,7 @@ Animal.prototype = {
 
 let a = new Animal('quack');
 a.speak();
-          </textarea>
+</textarea>
         </li>
     </section>
 
@@ -129,7 +129,7 @@ d.speak();
 //d.greet("Mike");
 // Now let's do stuff with getters (get foo(), and Object.create)
 // Also, instanceof - though instanceof can be easily fooled
-          </textarea>
+</textarea>
         </li>
         <li class="slide"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Inheritance_and_the_prototype_chain" target="_blank">On inheritance in Javascript.</a></li>
         <li class="slide"><a href="https://medium.com/javascript-scene/common-misconceptions-about-inheritance-in-javascript-d5d9bab29b0a" target="_blank">JS OOP gotchas, and an argument against inheritance.</a></li>
@@ -161,13 +161,15 @@ for (var i = 0; i < 3; ++i) {
     console.log(i);
   }, 50);
 }*/
-          </textarea>
+</textarea>
         </li>
         <li class="slide">Other gotchas...
           <textarea class="code" mode="javascript" style="display: none;" theme="cobalt" runnable="true">
-// var's can be redeclared, whereas let's cannot.
-var x = 1;
-var x = 2;
+// var's can be redeclared in the same block scope, whereas let's cannot.
+{
+  var x = 1;
+  var x = 2;
+}
 
 // var hoists! let does not.
 /*
@@ -176,7 +178,7 @@ var x = 2;
   var foo = "The above will result in undefined, not a ReferenceError";
 }());
 */
-          </textarea>
+</textarea>
         </li>
     </section>
 
@@ -187,6 +189,7 @@ var x = 2;
         <li class="slide">Some scripts will have <code>var</code>'s exclusively. This is usually an age hint.</li>
     </section>
 
+    <!-- SECTION: for...of -->
     <section class="slide">
       <h2>for...of</h2>
       <ul>
@@ -209,25 +212,79 @@ x.add('bar');*/
 for (let thing of x) {
   console.log(thing);
 }
-          </textarea>
+</textarea>
         </li>
         <li class="slide">Generally speaking, <code>for...of</code> is probably the way you want to iterate, except for <code>Object</code> properties</li>
       </ul>
     </section>
 
+    <!-- SECTION: Destructuring -->
     <section class="slide">
       <h2><code>Object</code> and <code>Array</code> destructuring</h2>
+      <ul>
+        <li class="slide">Fancy shorthand for multi-variable assignment</li>
+        <li class="slide">Useful if you have a function that returns an <code>Object</code> or an <code>Array</code> that you only want a part of.</li>
+        <li class="slide">Example:
+          <textarea class="code" mode="javascript" style="display: none;" theme="cobalt" runnable="true">
+function mikesPage() {
+  return {
+    url: 'http://www.mikeconley.ca',
+    type: 'blog'
+  };
+}
+
+let { url } = mikesPage();
+console.log(url);
+let { url: someURL } = mikesPage();
+console.log(someURL);
+// Gotcha: I can do let reassignment in block scope with destructuring. Fun times!
+
+// Arrays...
+</textarea>
     </section>
+
+    <section class="slide">
+      <h2><code>Object</code> and <code>Array</code> destructuring</h2>
+      <ul>
+        <li class="slide">Also useful when a function accepts an <code>Object</code>
+        <textarea class="code" mode="javascript" style="display: none;" theme="cobalt" runnable="true">
+
+function myFunction({ firstArg, secondArg }) {
+  console.log(`First arg: ${firstArg}, secondArg: ${secondArg}`);
+}
+
+myFunction({
+  firstArg: "This is first!",
+  secondArg: "This is second!",
+});
+</textarea></li>
+        <li class="slide">Common pattern:
+          <pre>
+            const { classes: Cc, interfaces: Ci, utils: Cu } = Components;
+            // ^-- oh yeah, const...
+          </pre></li>
+
+        <li class="slide"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment" target="_blank">Lots of other examples right here</a></li>
+        <li class="slide"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const" target="_blank">Documentation on <code>const</code></a>
+    </section>
+
+    <!-- QUESTIONS -->
+
+    <section class="slide">
+      <h2>Whew!</h2>
+      <ul>
+        <li class="slide">Hopefully we're about 1 hour in, or thereabouts.</li>
+        <li class="slide">Let's hear some questions.
+      <textarea class="code" mode="javascript" style="display: none;" theme="cobalt" runnable="true">
+</textarea></li>
+    </section>
+
+
+
 
     <!-- End slides. -->
 
     <!-- Begin extension snippets. Add or remove as needed. -->
-
-    <!-- deck.navigation snippet -->
-    <div aria-role="navigation">
-      <a href="#" class="deck-prev-link" title="Previous">&#8592;</a>
-      <a href="#" class="deck-next-link" title="Next">&#8594;</a>
-    </div>
 
     <!-- deck.status snippet -->
     <p class="deck-status" aria-role="status">
