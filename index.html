@@ -79,7 +79,7 @@
       <ul>
         <li class="slide">Usually abstracted away by libraries like Underscore.js or lodash</li>
         <li class="slide">Typical approach for defining a "class":
-          <textarea class="slide code" mode="javascript" style="display: none;" theme="cobalt" runnable="true">
+          <textarea class="code" mode="javascript" style="display: none;" theme="cobalt" runnable="true">
 function Animal(sound) {
   this.sound = sound;
 }
@@ -101,7 +101,7 @@ a.speak();
       <h2>Prototype-based inheritence...</h2>
       <ul>
         <li class="slide">Now let's extend this class a bit.
-          <textarea class="slide code" mode="javascript" style="display: none;" theme="cobalt" runnable="true">
+          <textarea class="code" mode="javascript" style="display: none;" theme="cobalt" runnable="true">
 function Animal(sound) {
   this.sound = sound;
 }
@@ -126,9 +126,12 @@ Duck.prototype.greet = function(who) {
 let d = new Duck("Howard");
 d.speak();
 //d.greet("Mike");
-// Now let's do stuff with getters, real quick
+// Now let's do stuff with getters (get foo(), and Object.create)
+// Also, instanceof - though instanceof can be easily fooled
           </textarea>
         </li>
+        <li class="slide"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Inheritance_and_the_prototype_chain" target="_blank">On inheritance in Javascript.</a></li>
+        <li class="slide"><a href="https://medium.com/javascript-scene/common-misconceptions-about-inheritance-in-javascript-d5d9bab29b0a" target="_blank">JS OOP gotchas, and an argument against inheritance.</a></li>
     </section>
     <!-- End slides. -->
 
@@ -189,12 +192,17 @@ d.speak();
 <!-- Initialize the deck. You can put this in an external file if desired. -->
 <script type="application/javascript;version=1.8">
   $(function() {
-   $(document).bind("keydown", "ctrl+f", function() {
+    $(document).bind("keydown", "ctrl+f", function() {
       if (!document.mozFullScreenElement) {
         document.documentElement.mozRequestFullScreen();
       } else {
         document.mozCancelFullScreen();
       }
+    });
+    $(document).bind("keydown", "ctrl+g", function() {
+      setTimeout(function() {
+        $.deck('showGoTo');
+      }, 100);
     });
     $.deck('.slide');
   });
