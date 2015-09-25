@@ -535,20 +535,134 @@ Task.spawn(function*() {
       </ul>
     </section>
 
+    <!-- Questions / examples -->
+
     <section class="slide">
       <h2>Whew!</h2>
       <ul>
         <li class="slide">Hopefully we're about 2 hours in, or thereabouts (if not, we're in trouble, and I need to move faster).</li>
         <li class="slide">Let's hear some questions, and do some exercises.
       <textarea class="code" mode="javascript" style="display: none;" theme="cobalt" runnable="true">
-// Let's re-use worker_example_1.js, and create a function sleep that
+// Let's re-use examples/worker_example_1.js, and create a function sleep that
 // instead of using setTimeout, sends a message to the worker, and returns
 // a Promise that resolves when the Worker responds with the "Done" message.
+let w = new Worker("examples/worker_example_1.js");
 
 // Then, let's write a Task that yields some sleeps. Again, we can't
 // use Task.jsm in here, so we're using task.js, which is similar.
 
 </textarea></li>
+    </section>
+
+    <!-- Tools -->
+
+    <section class="slide">
+      <h1>Browser Tools and Extension-writing</h1>
+    </section>
+
+    <section class="slide">
+      <h2>The Browser Toolbox</h2>
+      <ul>
+        <li class="slide">If you didn't already know, Firefox's UI ("chrome") uses the same rendering and JS engine as web content</li>
+        <li class="slide">This means that our web developer tools are re-usable for the Firefox UI!</li>
+        <li class="slide">The ability to inspect, manipulate and debug chrome code is disabled by default</li>
+    </section>
+
+    <section class="slide">
+      <h1>A Tour of the Browser Toolbox</h1>
+    </section>
+
+    <!-- SDK add-ons -->
+
+    <section class="slide">
+      <h1>Writing an SDK ("Jetpack") add-on</h1>
+    </section>
+
+
+    <section class="slide">
+      <h2>You need a few things...</h2>
+      <ul>
+        <li class="slide"><code>jpm</code> is a CLI tool for the Firefox Add-on SDK.</li>
+        <li class="slide">Written for Node.js, and available from <code>npm</code></li>
+        <li class="slide">Assuming you have Node installed, and <code>npm</code> available...</li>
+        <li class="slide"><pre>
+npm install jpm --global
+# might need sudo depending on your setup.
+</pre></li>
+        <li class="slide"><pre>
+mkdir sdk-example
+cd sdk-example
+jpm init
+</pre></li>
+        <li class="slide">Extensions<pre>
+npm install jpm --global
+# might need sudo depending on your setup.
+</pre></li>
+        <li class="slide"><pre>
+mkdir sdk-example
+cd sdk-example
+jpm init
+</pre></li>
+    </section>
+
+    <section class="slide">
+      <h2>Build your simple extension!</h2>
+      <ul>
+        <li class="slide">(I might be using "add-on" and "extension" interchangeably... I'm not alone)</li>
+        <li class="slide">Add-ons for Firefox are packaged in XPI files<pre>
+jpm xpi
+</pre></li>
+        <li class="slide">Let's run it!<pre>
+jpm run
+</pre></li>
+        <li class="slide">It's installed, but it's boring. Let's do something neat...</li>
+      </ul>
+    </section>
+
+    <section class="slide">
+      <h2>page-mod</h2>
+      <ul>
+        <li class="slide"><code>page-mod</code> is an "SDK Module"</li>
+        <li class="slide">Allows you modify the behaviour and appearance of sites matching a URL</li>
+        <li class="slide">Open up index.js...
+<textarea class="code" mode="javascript" style="display: none;" theme="cobalt">
+var pagemod = require("sdk/page-mod");
+
+pagemod.PageMod({
+  include: "*.mozilla.org",
+  contentScript: "document.body.innerHTML = '<h1>Hi there</h1>' + document.body.innerHTML",
+});
+</textarea></li>
+      </ul>
+    </section>
+
+    <section class="slide">
+      <h2>data files</h2>
+      <ul>
+        <li class="slide">Better than inline scripting
+<textarea class="code" mode="javascript" style="display: none;" theme="cobalt">
+var pagemod = require("sdk/page-mod");
+var data = require("sdk/self").data;
+
+pagemod.PageMod({
+  include: "*.mozilla.org",
+  contentScriptFile: data.url("content.js"),
+  // ^-- This has also changed!
+});
+</textarea></li>
+        <li class="slide">Create a data folder in your add-on directory, and then put this in content.js:
+<textarea class="code" mode="javascript" style="display: none;" theme="cobalt">
+let h1 = document.createElement("h1");
+h1.style.color = "red";
+h1.textContent = "Ohai there!";
+document.body.insertBefore(h1, document.body.firstChild);
+</textarea></li>
+
+      </ul>
+    </section>
+
+    <section class="slide">
+      <h1>Let's try the add-on debugger</h1>
     </section>
 
     <!-- End slides. -->
