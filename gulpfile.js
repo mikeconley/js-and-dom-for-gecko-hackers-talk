@@ -2,7 +2,7 @@ var gulp = require('gulp');
 var rsync = require('gulp-rsync');
 
 gulp.task('deploy', function() {
-  return gulp.src(['{themes,extensions,core}/**/*.{js,css}', 'index.html'])
+  return gulp.src(['{themes,extensions,core,examples}/**/*.{js,css}', 'index.html'])
              .pipe(rsync({
                root: '.',
                hostname: 'people.mozilla.org',
