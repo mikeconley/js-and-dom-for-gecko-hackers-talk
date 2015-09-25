@@ -36,3 +36,7 @@ h1, .vcenter {
 .deck-container .slide code {
   color: #FFFF00;
 }
+
+iframe {
+  background-color: #EFEFEF;
+}

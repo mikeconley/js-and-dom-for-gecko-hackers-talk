@@ -274,19 +274,65 @@ myFunction({
       <h2>Whew!</h2>
       <ul>
         <li class="slide">Hopefully we're about 1 hour in, or thereabouts.</li>
-        <li class="slide">Let's hear some questions.
+        <li class="slide">Let's hear some questions, and do some exercises.
       <textarea class="code" mode="javascript" style="display: none;" theme="cobalt" runnable="true">
+function Shape({ x, y }) {
+  this._x = x;
+  this._y = y;
+}
+
+Shape.prototype = {
+  get coords() {
+    return { x: this._x, y: this._y };
+  },
+}
+
+// Implement Rect, which subclasses Shape. In addition to
+// the x and y coordinate parameters, should also take height
+// and width. Should also have a isSquare getter that returns
+// true if the Rect is square.
+
+let s = new Rect({ x: 5, y: 5, h: 25, w: 25 });
+console.log(s.isSquare);
+
+/*
+let rects = [
+  new Rect({ x: 0, y: 0, h: 5, w: 100 }),
+  new Rect({ x: 0, y: 5, h: 13, w: 2 }),
+  new Rect({ x: 10, y: 10, h: 15, w: 15 }),
+  new Rect({ x: 16, y: -5, h: 3, w: 3 }),
+];
+
+// Iterate the rects using for...of, and console.log
+// isSquare for each.
+*/
+
+/*
+// Using object destructuring to assign the coords of
+// s to local variables x and y in a single line.
+*/
 </textarea></li>
+    </section>
+
+    <section class="slide">
+      <h1>Asynchronicity and Concurrency</h1>
+    </section>
+
+    <section class="slide">
+      <h2>Asynchronous things in JavaScript</h2>
+      <ul>
+        <li>JavaScript is single-threaded and event driven</li>
+        <li>"Asynchronous" things queue a function to fire at a later time, but still on the main thread</li>
+        <li>One can use <code>setTimeout</code> to break up heavy work into chunks, but there are better ways</li>
+      </ul>
     </section>
 
     <section class="slide">
       <h2>Workers</h2>
       <ul>
-        <li class="slide">JavaScript is single-threaded, and runs on the main-thread</li>
-        <li class="slide">Good: access to DOM!</li>
-        <li class="slide">Bad: able to block the main thread, which results in jank / hangs, even during "async" operations</li>
         <li class="slide">Moving process-heavy things off the main thread is good for responsiveness</li>
-        <li class="slide">Workers allow actual concurrency in JavaScript, with some limitations</li>
+        <li class="slide">Workers allow actual concurrency in JavaScript, with some limitations (the main one being the DOM)</li>
+        <li class="slide"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Functions_and_classes_available_to_workers" target="_blank">Here's a full list of things available to Workers in Firefox</a></li>
       <textarea class="code" mode="javascript" style="display: none;" theme="cobalt" runnable="true">
 function workerFunc() {
   var d = Date.now();
@@ -306,22 +352,39 @@ let w = new Worker(`data:,(${workerFunc.toString()})();`);
     <section class="slide">
       <h2>Communicating with Workers</h2>
       <ul>
-        <li class="slide">JavaScript is single-threaded, and runs on the main-thread</li>
+        <li class="slide">Communication is done with message passing</li>
+        <li class="slide">You can't send a function over unless you somehow <code>eval</code> it on the other side</li>
+        <li class="slide">But if it can be serialized to JSON, then it can be sent</li>
+        <li class="slide">Here's worker_example_1.js:
+          <iframe src="examples/worker_example_1.js"></iframe>
+        </li>
       </ul>
     </section>
 
     <section class="slide">
-      <h2>Worker limitations</h2>
+      <h2>Communicating with Workers</h2>
       <ul>
-        <li class="slide">JavaScript is single-threaded, and runs on the main-thread</li>
+        <li class="slide">Let's use that file...
+<textarea class="code" mode="javascript" style="display: none;" theme="cobalt" runnable="true">
+let w = new Worker("examples/worker_example_1.js");
+w.addEventListener("message", function(e) {
+  if (e.data.name == "Log") {
+    console.log(e.data.msg);
+  }
+});
+
+w.postMessage(2);
+</textarea></li>
+
       </ul>
     </section>
-
 
     <section class="slide">
       <h2>ChromeWorkers</h2>
       <ul>
-        <li class="slide">JavaScript is single-threaded, and runs on the main-thread</li>
+        <li class="slide">Extends Workers with more powers, and ES6 stuff (like <code>let</code>)</li>
+        <li class="slide">Non-standard, and not exposed to web content</li>
+        <li class="slide">Has access to <a href="https://developer.mozilla.org/en-US/docs/Mozilla/js-ctypes?redirectlocale=en-US&redirectslug=js-ctypes" target="_blank">js-ctypes</a> via a global <code>ctypes</code>.
       </ul>
     </section>
 
