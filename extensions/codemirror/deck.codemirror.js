@@ -189,6 +189,7 @@
               var sandBoxMarkup = "<script type='application/javascript;version=1.8'>"+
                 "var MSIE/*@cc_on =1@*/;"+ // sniff
                 "console={ log: parent.console.log };" +
+                "var Task = parent.Task;" +
                 "parent.sandbox=MSIE?this:{eval:function(s){return eval(s)}}<\/script>";
 
               var exposeGlobals;

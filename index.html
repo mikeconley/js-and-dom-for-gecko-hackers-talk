@@ -52,6 +52,10 @@
     </section>
 
     <section class="slide">
+      <h1>Start by kicking off a build of mozilla-central</h1>
+    </section>
+
+    <section class="slide">
       <h2>Today's objectives</h2>
         <ul>
           <li class="slide">Write code which uses prototype-based inheritance</li>
@@ -314,6 +318,8 @@ let rects = [
 </textarea></li>
     </section>
 
+    <!-- Async intro -->
+
     <section class="slide">
       <h1>Asynchronicity and Concurrency</h1>
     </section>
@@ -326,6 +332,8 @@ let rects = [
         <li>One can use <code>setTimeout</code> to break up heavy work into chunks, but there are better ways</li>
       </ul>
     </section>
+
+    <!-- Workers -->
 
     <section class="slide">
       <h2>Workers</h2>
@@ -375,7 +383,6 @@ w.addEventListener("message", function(e) {
 
 w.postMessage(2);
 </textarea></li>
-
       </ul>
     </section>
 
@@ -388,6 +395,161 @@ w.postMessage(2);
       </ul>
     </section>
 
+    <!-- Promises -->
+
+    <section class="slide">
+      <h2>Promises</h2>
+      <ul>
+        <li class="slide">Asynchronous code can result in callback hell:
+<textarea class="code" mode="javascript" style="display: none;" theme="cobalt">
+function doAsyncThing(arg, callback) {
+  return doFirstPart(arg, function(result1) {
+    doSecondPart(result1, function(result2) {
+      doLastPart(result2, function(result3) {
+        callback(result3);
+      });
+    });
+  });
+}
+</textarea></li>
+        <li>You still see this pattern in older parts of our code, <a href="https://hg.mozilla.org/mozilla-central/file/9d369fc64e91/browser/base/content/test/plugins/browser_CTP_data_urls.js" target="_blank">like old tests</a></li>
+      </ul>
+    </section>
+
+    <section class="slide">
+      <h2>Promises</h2>
+      <ul>
+        <li class="slide">Promises reorient things by adding an intermediary "then-able" object</li>
+        <li class="slide">Difference is subtle, but the results can be profound</li>
+        <li class="slide">If <code>doFirstPart</code>, <code>doSecondPart</code> and <code>doLastPart</code> returned Promises, we could do:
+<textarea class="code" mode="javascript" style="display: none;" theme="cobalt">
+function doAsyncThing(arg) {
+  let promise = doFirstPart(arg);
+  return promise.then(doSecondPart)
+                .then(doLastPart)
+                .catch(console.error);
+}
+</textarea></li>
+        <li class="slide">That might seem like a small win, but it gets better with <code>yield</code> and Tasks</li>
+      </ul>
+    </section>
+
+    <section class="slide">
+      <h2>Promises</h2>
+      <ul>
+        <li class="slide">Let's write a function that returns a <code>Promise</code>
+<textarea class="code" mode="javascript" style="display: none;" theme="cobalt" runnable="true">
+function sleep(aMs) {
+  return new Promise(function(resolve, reject) {
+    if (aMs < 0) {
+      reject("Can't sleep for negative time.");
+      return;
+    }
+
+    setTimeout(function() {
+      resolve("All done");
+    }, aMs * 1000);  // This can be one-liner'd...
+  });
+}
+
+sleep(2).then(function(msg) {
+  console.log(msg);
+}).catch(function(msg) {
+  console.log("ERROR: " + msg);
+});
+</textarea></li>
+        <li>Questions about Promises? Because we're about to crank it up...</li>
+      </ul>
+    </section>
+
+    <!-- Tasks -->
+
+    <section class="slide">
+      <h2>Tasks</h2>
+      <ul>
+        <li class="slide">ES6 gives us the <code>yield</code> keyword</li>
+        <li class="slide">Used for <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator" target="_blank">Generators</a>, allows us to effectively halt and resume a function</li>
+        <li class="slide">Coupled with Promises, this leads us to Tasks!</li>
+        <li class="slide">Not sure how often they're used on the web, but used extensively in Firefox
+<textarea class="code" mode="javascript" style="display: none;" theme="cobalt" runnable="true">
+function sleep(aMs) {
+  return new Promise(function(resolve, reject) {
+    if (aMs < 0) {
+      reject("Can't sleep for negative time.");
+      return;
+    }
+
+    setTimeout(function() {
+      resolve("All done");
+    }, aMs * 1000);  // This can be one-liner'd...
+  });
+}
+
+Task.spawn(function() {
+  console.log("Starting to sleep for seconds");
+  yield sleep(2);
+  console.log("Done first sleep - now for second sleep");
+  yield sleep(2);
+  console.log("Done sleeping. We're done, folks!");
+});
+</textarea></li>
+      <li class="slide">This was task.js, not Task.jsm, because this slideshow is in web content</li>
+      </ul>
+    </section>
+
+    <section class="slide">
+      <h2>Task.jsm</h2>
+      <ul>
+        <li class="slide">Available as a JSM at resource://gre/modules/Task.jsm</li>
+        <li class="slide">Control flow and error handling example:
+<textarea class="code" mode="javascript" style="display: none;" theme="cobalt">
+// This won't run in here - paste it into a Scratchpad in the
+// Browser Environment
+
+Components.utils.import("resource://gre/modules/Task.jsm");
+
+function sleep(aMs) {
+  return new Promise(function(resolve, reject) {
+    if (aMs < 0) {
+      reject("Can't sleep for negative time.");
+      return;
+    }
+
+    setTimeout(resolve, aMs * 1000);  // One-liner'd!
+  });
+}
+
+Task.spawn(function*() {
+  console.log("Starting to sleep for seconds");
+  yield sleep(2);
+  console.log("Done first sleep - now for second sleep");
+  yield sleep(2);
+  console.log("Done sleeping. We're done, folks!");
+  return "Success!";
+}).then(function(msg) {
+  console.log("All done! Result: " + msg);
+}).catch(function(e) {
+  console.log("RUH ROH: " + e);
+});
+</textarea></li>
+      </ul>
+    </section>
+
+    <section class="slide">
+      <h2>Whew!</h2>
+      <ul>
+        <li class="slide">Hopefully we're about 2 hours in, or thereabouts (if not, we're in trouble, and I need to move faster).</li>
+        <li class="slide">Let's hear some questions, and do some exercises.
+      <textarea class="code" mode="javascript" style="display: none;" theme="cobalt" runnable="true">
+// Let's re-use worker_example_1.js, and create a function sleep that
+// instead of using setTimeout, sends a message to the worker, and returns
+// a Promise that resolves when the Worker responds with the "Done" message.
+
+// Then, let's write a Task that yields some sleeps. Again, we can't
+// use Task.jsm in here, so we're using task.js, which is similar.
+
+</textarea></li>
+    </section>
 
     <!-- End slides. -->
 
@@ -438,6 +600,9 @@ w.postMessage(2);
 
 <!-- Plugin code -->
 <script type="application/javascript;version=1.8" src="extensions/codemirror/deck.codemirror.js"></script>
+
+<!-- Example libraries -->
+<script type="application/javascript;version=1.8" src="examples/task.js"></script>
 
 <!-- Initialize the deck. You can put this in an external file if desired. -->
 <script type="application/javascript;version=1.8">

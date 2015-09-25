@@ -11,4 +11,7 @@ addEventListener("message", function(e) {
   var d = Date.now();
   while (Date.now() - d < ms) {}
   log("Worker is done waiting for: " + e.data + " seconds");
+  postMessage({
+    name: "Done",
+  });
 });
