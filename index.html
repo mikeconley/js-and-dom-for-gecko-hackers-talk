@@ -656,6 +656,113 @@ document.body.insertBefore(h1, document.body.firstChild);
       <h1>Let's try the add-on debugger</h1>
     </section>
 
+    <!-- Testing the browser -->
+
+    <section class="slide">
+      <h1>Automated tests</h1>
+    </section>
+
+    <section class="slide">
+      <h2>We use a number of test frameworks</h2>
+      <ul>
+        <li class="slide">My guess is that we discover that the existing framework is insufficient so we build a new one and never fully migrate</li>
+        <li class="slide">There are other reasons - like we might want some tests to be cross-browser compatible</li>
+        <li class="slide">Regardless, we have several different "types" of tests</li>
+      </ul>
+    </section>
+
+    <section class="slide">
+      <h2>Our testing frameworks:</h2>
+      <ul>
+        <li class="slide">xpcshell: This test runs in a JavaScript "shell" with XPCOM access. No windows, and no DOM. Good for testing JS, or bits that don't require DOM.</li>
+        <li class="slide">reftests: Tests that do some layout and / or rendering, which we then compare against a reference image. Good for testing graphics and layout.</li>
+        <li class="slide">mochitest-plain: Tests web content with web content privleges. Good for testing for compliance with web specs.</li>
+        <li class="slide">mochitest-chrome: Privileged tests running in a bare window. Good for testing XUL and layout.</li>
+        <li class="slide">mochitest-browser: Privileged tests running in a browser. Good for exercising Firefox to do Firefox things.</li>
+        <li class="slide">mochitest-browser: Privileged tests running in a browser. Good for exercising Firefox to do Firefox things.</li>
+        <li class="slide">marionette: Our newest framework. Similar to Selenium. Can drive Firefox for Desktop, as well as B2G. This is probably the future.</li>
+        <li class="slide"><a href="https://developer.mozilla.org/en-US/docs/Mozilla/QA/Automated_testing" target="_blank">Here's a decision chart to help you determine which one you should use when.</a>
+      </ul>
+    </section>
+
+    <section class="slide">
+      <h2>How to run tests</h2>
+<pre>
+./mach test [path-to-test]
+
+./mach test browser/base/content/test/general/browser_audioTabIcon.js
+#       ^-- This will automatically choose the right framework,
+#           and is good if you just want to run the test simply.
+
+# Note also that the test starts with browser_. This is a browser mochitest.
+# xpcshell, mochitest-plain and mochitest-chrome start with test_.
+
+./mach mochitest browser/base/content/test/general/browser_audioTabIcon.js
+
+# Functionally equivalent to the first one
+
+./mach mochitest browser/base/content/test/general/browser_audioTabIcon.js --e10s
+
+# --e10s = Run with out-of-process tabs
+
+# Check out --help for more options. I like --jsdebugger, --run-until-failure,
+# --no-autorun, and --keep-open
+</pre>
+    </section>
+
+    <section class="slide">
+      <h2>Let's write a really simple mochitest-browser test!</h2>
+      <ul>
+        <li class="slide">Firefox will open, and our test will start</li>
+        <li class="slide">Our test will open a new tab</li>
+        <li class="slide">Our test will make sure there are now 2 tabs</li>
+        <li class="slide">Our test will close the tab it had opened</li>
+      </ul>
+    </section>
+
+    <section class="slide">
+      <h2>Get the test registered</h2>
+      <ul>
+        <li class="slide">Find out where to put it. Let's put it under <pre>browser/base/content/test/general</pre> for now</li>
+        <li class="slide">Give it a name. Let's call it <pre>browser_simpletest.js</pre></li>
+        <li class="slide">
+<pre>
+add_task(function*() {
+  ok(true, "My test didn't run.");
+});
+</pre>
+        <li class="slide">Find the browser.ini</li>
+        <li class="slide">Add browser_simpletest.js to browser.ini</li>
+        <li class="slide">Make sure our test will run
+<pre>./mach test browser/base/content/test/general/browser_simpletest.js</pre>
+</li>
+      </ul>
+    </section>
+
+    <section class="slide">
+      <h2>Let's write our actual test</h2>
+<textarea class="code" mode="javascript" style="display: none;" theme="cobalt">
+add_task(function*() {
+  ok(true, "My test didn't run.");
+});
+</textarea>
+    </section>
+
+    <section class="slide">
+      <h2>Let's run it!</h2>
+<pre>
+./mach test browser/base/content/test/general/browser_simpletest.js
+</pre>
+    </section>
+
+    <section class="slide">
+      <h1>Let's debug it if necessary</h1>
+    </section>
+
+    <section class="slide">
+      <h1>Fin</h1>
+    </section>
+
     <!-- End slides. -->
 
     <!-- Begin extension snippets. Add or remove as needed. -->
