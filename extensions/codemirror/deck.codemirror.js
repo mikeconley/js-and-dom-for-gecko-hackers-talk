@@ -39,7 +39,8 @@
       theme : "default",
       indentUnit : 1,
       indentWithTabs : false,
-      runnable : false
+      runnable : false,
+      viewPortMargin: Infinity
     }
   });
   
@@ -150,6 +151,10 @@
                 "class" : "button clear",
                 text : "Clear"
               }).prependTo(wrapper),
+              fixButton = $('<button>', {
+                "class": "button",
+                text: "Fix wonky editor"
+              }).prependTo(wrapper),
               output = $('<div>', {
                 "class" : opts.classes.codemirrorresult
               }).appendTo($(wrapper).parent());
@@ -162,6 +167,12 @@
               output.html('');
             };
           }(editor, output));
+
+          fixButton.click(function(editor) {
+            return function(event) {
+              editor.refresh();
+            };
+          }(editor));
 
           var iframe;
 
