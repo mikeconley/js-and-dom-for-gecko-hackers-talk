@@ -535,6 +535,51 @@ Task.spawn(function*() {
       </ul>
     </section>
 
+    <section class="slide">
+      <h2>Arrow functions</h2>
+      <ul>
+        <li class="slide">Sometimes you're not in a position to use Tasks, so you need to pass a callback to a Promise's <code>then()</code> function.</li>
+        <li class="slide">When you're doing this inside an Object method, it's often useful for the callback to bind <code>this</code> to the Object</li>
+        <li class="slide">Before arrow functions, there were several ways to do this:
+<textarea class="code" mode="javascript" style="display: none;" theme="cobalt" runnable="true">
+var Duck = {
+  asyncQuack: function() {
+    this.sleep(100).then(function() {
+      try {
+        this.quack();  // This will not work!
+      } catch(e) {
+        console.log(e.message);
+      }
+    }, 5000);
+  },
+
+  quack: function() {
+    console.log("Quack");
+  },
+
+  sleep: function(aMs) {
+    return new Promise(function(resolve) {
+      setTimeout(resolve, aMs);
+    })
+  }
+};
+
+Duck.asyncQuack();
+
+// One work around is to alias this in the closure...
+// Another is to use .bind...
+// But my favourite is the arrow function, which automatically binds "this" to the enclosing context!
+// Also handy for quick functions.
+/*
+let x = [{ name: "Mike", pumpkins: 1 }, { name: "Emily", pumpkins: 12 }, { name: "Cassie", pumpkins: 3 }];
+
+console.log(x.filter(function(person) {
+  return person.pumpkins > 3;
+}));*/
+</textarea></li>
+</ul>
+    </section>
+
     <!-- Questions / examples -->
 
     <section class="slide">
