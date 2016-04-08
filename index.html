@@ -58,7 +58,8 @@
     <section class="slide">
       <h2>Today's objectives</h2>
         <ul>
-          <li class="slide">Write code which uses prototype-based inheritance</li>
+          <li class="slide">Write code which uses the new ES6 class-based inheritance</li>
+          <li class="slide">Examine code which uses old-school prototype-based inheritance</li>
           <li class="slide">Understand and use <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let" target="_blank"><code>let</code></a> and <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of" target="_blank"><code>for...of</code></a></li>
           <li class="slide"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment" target="_blank">Array and object destructuring</a></li>
           <li class="slide"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Worker" target="_blank">Workers</a></li>
@@ -78,12 +79,89 @@
       <h1>Ask questions!</h1>
     </section>
 
-    <!-- SECTION: OOP / Prototype inheritance -->
+    <!-- SECTION: OOP / Class-based inheritance -->
+    <section class="slide">
+      <h2>Shiny new ES6 <code>classes</code></h2>
+      <ul>
+        <li class="slide"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes" target="_blank">First shipped in Firefox 45</a>, so this is pretty new stuff</li>
+        <li class="slide">If you've ever done OOP in other languages, this should feel familiar</li>
+        <li class="slide">Typical approach for defining a class:
+          <textarea class="code" mode="javascript" style="display: none;" theme="cobalt" runnable="true">
+class Animal {
+  constructor(sound) {
+    this.sound = sound;
+  }
+
+  // ^-- no comma
+
+  speak() {
+    console.log(this.sound);
+  }
+}
+
+let a = new Animal('quack');
+a.speak();
+</textarea>
+        </li>
+    </section>
 
     <section class="slide">
-      <h2>Prototype-based inheritance...</h2>
+      <h2>Extending, and static class methods</h2>
+      <ul>
+        <li class="slide">
+          <textarea class="code" mode="javascript" style="display: none;" theme="cobalt" runnable="true">
+class Animal {
+  constructor(sound) {
+    this.sound = sound;
+  }
+
+  speak() {
+    console.log(this.sound);
+  }
+}
+
+class Duck extends Animal {
+  constructor(name) {
+    super("quack");
+    this.name = name;
+  }
+
+  greet(who) {
+    console.log(`Hello ${who}, I'm a duck and my name is ${this.name}. ${this.sound}!`);
+  }
+
+  // We can add a getter for the name here too.
+
+  static haveSameName(duckA, duckB) {
+    return duckA.name === duckB.name;
+  }
+}
+
+let d1 = new Duck("Howard");
+d1.speak();
+// d1.greet("Mike");
+// let d2 = new Duck("Howard");
+// console.log(Duck.haveSameName(d1, d2));
+</textarea>
+        </li>
+    </section>
+
+    <section class="slide">
+      <h2>Expect to see more and more of this in the tree.</h2>
+      <ul>
+        <li class="slide">For a while, we're going to have two different ways of creating classes in JavaScript in the tree. It's the circle of life.</li>
+        <li class="slide">Probably best to use this newer style in new, green-field code.</li>
+        <li class="slide">I've just scratched the surface here. <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes" target="_blank">Here's more documentation.</a></li>
+      </ul>
+    </section>
+
+    <!-- SECTION: OOP / Prototype-based inheritance -->
+
+    <section class="slide">
+      <h2>Old-school prototype-based inheritance...</h2>
       <ul>
         <li class="slide">Usually abstracted away by libraries like Underscore.js or lodash</li>
+        <li class="slide">Up until recently, this was how you did OOP and inheritance in JavaScript. Lots of Mozilla code still uses this.</li>
         <li class="slide">Typical approach for defining a "class":
           <textarea class="code" mode="javascript" style="display: none;" theme="cobalt" runnable="true">
 function Animal(sound) {
