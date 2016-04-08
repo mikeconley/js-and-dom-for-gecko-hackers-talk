@@ -131,7 +131,7 @@ Duck.prototype.greet = function(who) {
 let d = new Duck("Howard");
 d.speak();
 //d.greet("Mike");
-// Now let's do stuff with getters (get foo(), and Object.create)
+// Now let's do stuff with getters (get name(), and Object.create)
 // Also, instanceof - though instanceof can be easily fooled
 </textarea>
         </li>
@@ -178,8 +178,8 @@ for (var i = 0; i < 3; ++i) {
 // var hoists! let does not.
 /*
 (function() {
-  console.log(foo);
-  var foo = "The above will result in undefined, not a ReferenceError";
+  console.log(myVariable);
+  var myVariable = "The above will result in undefined, not a ReferenceError";
 }());
 */
 </textarea>
@@ -205,16 +205,16 @@ for (var i = 0; i < 3; ++i) {
 //let x = [1, 2, 3];
 
 /*
-let x = new Set();
-x.add('foo');
-x.add('bar');*/
+let candies = new Set();
+candies.add('chocolate');
+candies.add('gum');*/
 
-//let x = {test: 'hello', test2: 'hello again'}; // Won't work
+//let candies = {chocolate: '90% dark', gum: 'Everlasting freshness'}; // Won't work
 
 // Maps with decomposition: for (let [key, value] of someMap)...
 
-for (let thing of x) {
-  console.log(thing);
+for (let candy of candies) {
+  console.log(candy);
 }
 </textarea>
         </li>
