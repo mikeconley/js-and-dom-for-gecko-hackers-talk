@@ -327,9 +327,9 @@ let rects = [
     <section class="slide">
       <h2>Asynchronous things in JavaScript</h2>
       <ul>
-        <li>JavaScript is single-threaded and event driven</li>
-        <li>"Asynchronous" things queue a function to fire at a later time, but still on the main thread</li>
-        <li>One can use <code>setTimeout</code> to break up heavy work into chunks, but there are better ways</li>
+        <li class="slide">JavaScript is single-threaded and event driven</li>
+        <li class="slide">"Asynchronous" things queue a function to fire at a later time, but still on the main thread</li>
+        <li class="slide">One can use <code>setTimeout</code> to break up heavy work into chunks, but there are better ways</li>
       </ul>
     </section>
 
@@ -341,6 +341,7 @@ let rects = [
         <li class="slide">Moving process-heavy things off the main thread is good for responsiveness</li>
         <li class="slide">Workers allow actual concurrency in JavaScript, with some limitations (the main one being the DOM)</li>
         <li class="slide"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Functions_and_classes_available_to_workers" target="_blank">Here's a full list of things available to Workers in Firefox</a></li>
+        <li class="slide">
       <textarea class="code" mode="javascript" style="display: none;" theme="cobalt" runnable="true">
 function workerFunc() {
   var d = Date.now();
@@ -412,7 +413,7 @@ function doAsyncThing(arg, callback) {
   });
 }
 </textarea></li>
-        <li>You still see this pattern in older parts of our code, <a href="https://hg.mozilla.org/mozilla-central/file/9d369fc64e91/browser/base/content/test/plugins/browser_CTP_data_urls.js" target="_blank">like old tests</a></li>
+        <li class="slide">You still see this pattern in older parts of our code, <a href="https://hg.mozilla.org/mozilla-central/file/9d369fc64e91/browser/base/content/test/plugins/browser_CTP_data_urls.js" target="_blank">like old tests</a></li>
       </ul>
     </section>
 
@@ -458,7 +459,7 @@ sleep(2).then(function(msg) {
   console.log("ERROR: " + msg);
 });
 </textarea></li>
-        <li>Questions about Promises? Because we're about to crank it up...</li>
+        <li class="slide">Questions about Promises? Because we're about to crank it up...</li>
       </ul>
     </section>
 
@@ -485,7 +486,7 @@ function sleep(aMs) {
   });
 }
 
-Task.spawn(function() {
+Task.spawn(function() { // Should be function*, but that doesn't work with Task.js
   console.log("Starting to sleep for seconds");
   yield sleep(2);
   console.log("Done first sleep - now for second sleep");
