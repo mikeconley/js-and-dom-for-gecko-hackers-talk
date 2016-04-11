@@ -67,8 +67,8 @@
           <li class="slide"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions" target="_blank">Arrow functions</a></li>
           <li class="slide"><a href="https://developer.mozilla.org/en-US/docs/Tools/Browser_Toolbox" target="_blank">The Browser Toolbox</a></li>
           <li class="slide">Profiling</li>
-          <li class="slide">Writing restartless extensions with the <a href="https://developer.mozilla.org/en-US/Add-ons/SDK">SDK</a></li>
-          <li class="slide">Using page-mods to alter a site in an extension</li>
+          <li class="slide">Writing a simple <a href="https://developer.mozilla.org/en-US/Add-ons/WebExtensions">WebExtension</a></li>
+          <li class="slide">Using a content script in a WebExtension to alter a website</li>
           <li class="slide">Debugging an extension</li>
           <li class="slide">Testing Gecko</li>
           <li class="slide">Writing a "browser chrome" mochitest</li>
@@ -696,88 +696,93 @@ let w = new Worker("examples/worker_example_1.js");
       <h1>A Tour of the Browser Toolbox</h1>
     </section>
 
-    <!-- SDK add-ons -->
+    <!-- WebExtension add-ons -->
 
     <section class="slide">
-      <h1>Writing an SDK ("Jetpack") add-on</h1>
+      <h1>Writing a WebExtension</h1>
     </section>
 
 
     <section class="slide">
-      <h2>You need a few things...</h2>
+      <h2>A brief introduction to WebExtensions</h2>
       <ul>
-        <li class="slide"><code>jpm</code> is a CLI tool for the Firefox Add-on SDK.</li>
-        <li class="slide">Written for Node.js, and available from <code>npm</code></li>
-        <li class="slide">Assuming you have Node installed, and <code>npm</code> available...</li>
+        <li class="slide">These are brand-spankin' new, and not released yet.</li>
+        <li class="slide">Modeled after the Chromium extension APIs</li>
+        <li class="slide">Multiprocess friendly by default!</li>
+        <li class="slide"><a href="http://arewewebextensionsyet.com/" target="_blank">We're close to API parity</a>, and we're hoping to add APIs and augment existing ones.</li>
         <li class="slide"><pre>
-npm install jpm --global
-# might need sudo depending on your setup.
-</pre></li>
-        <li class="slide"><pre>
-mkdir sdk-example
-cd sdk-example
-jpm init
+mkdir my-webextension
+cd my-webextension
+# Use your editor, and open a new file called manifest.json
 </pre></li>
     </section>
 
     <section class="slide">
-      <h2>Build your simple extension!</h2>
+      <h2>manifest.json</h2>
       <ul>
-        <li class="slide">(I might be using "add-on" and "extension" interchangeably... I'm not alone)</li>
-        <li class="slide">Add-ons for Firefox are packaged in XPI files<pre>
-jpm xpi
+        <li class="slide">This is where your WebExtension describes itself</li>
+        <li class="slide">Here's some boilerplate for you:<pre>
+{
+  "name": "My WebExtension",
+  "version": "1.0",
+  "manifest_version": 2,
+  "description": "Tooling around with WebExtensions",
+  "permissions": [],
+
+  "applications": {
+    "gecko": {
+      "id": "my-webextension@webextensions"
+    }
+  }
+}
 </pre></li>
-        <li class="slide">Let's run it!<pre>
-jpm run
-</pre></li>
+        <li class="slide">Let's run it!</li>
         <li class="slide">It's installed, but it's boring. Let's do something neat...</li>
       </ul>
     </section>
 
     <section class="slide">
-      <h2>page-mod</h2>
+      <h2>Modifying pages with content scripts...</h2>
       <ul>
-        <li class="slide"><code>page-mod</code> is an "SDK Module"</li>
-        <li class="slide">Allows you modify the behaviour and appearance of sites matching a URL</li>
-        <li class="slide">Open up index.js...
+        <li class="slide"><a href="https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Content_scripts" target="_blank">Content scripts</a> are injected into web content, and get an X-ray view of the DOM and JS environment of a page</li>
+        <li class="slide">They have limited privileges, but can communicate things to the parent process where there are elevated privileges</li>
+        <li class="slide">Open up manifest.json again...
 <textarea class="code" mode="javascript" style="display: none;" theme="cobalt">
-var pagemod = require("sdk/page-mod");
-
-pagemod.PageMod({
-  include: "*.mozilla.org",
-  contentScript: "document.body.innerHTML = '<h1>Hi there</h1>' + document.body.innerHTML",
-});
+  "content_scripts": [
+    {
+      "matches": ["*://*.mozilla.org/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
 </textarea></li>
       </ul>
     </section>
 
     <section class="slide">
-      <h2>data files</h2>
+      <h2>Now our content script...</h2>
       <ul>
-        <li class="slide">Better than inline scripting
-<textarea class="code" mode="javascript" style="display: none;" theme="cobalt">
-var pagemod = require("sdk/page-mod");
-var data = require("sdk/self").data;
-
-pagemod.PageMod({
-  include: "*.mozilla.org",
-  contentScriptFile: data.url("content.js"),
-  // ^-- This has also changed!
-});
-</textarea></li>
-        <li class="slide">Create a data folder in your add-on directory, and then put this in content.js:
+        <li class="slide">
 <textarea class="code" mode="javascript" style="display: none;" theme="cobalt">
 let h1 = document.createElement("h1");
 h1.style.color = "red";
-h1.textContent = "Ohai there!";
+h1.textContent = "Oh, hello there!";
 document.body.insertBefore(h1, document.body.firstChild);
 </textarea></li>
-
       </ul>
     </section>
 
     <section class="slide">
-      <h1>Let's try the add-on debugger</h1>
+      <h1>Debugging</h1>
+    </section>
+
+    <section class="slide">
+      <h2>Packaging and signing</h2>
+      <ul>
+        <li class="slide">Firefox add-ons are XPI files, which are really just ZIP files</li>
+        <li class="slide">ZIP up the contents of that folder we just made, and you've got an (unsigned) add-on</li>
+        <li class="slide"><code>xpinstall.signatures.required</code></li>
+        <li class="slide">You can sign an add-on using <a href="https://developer.mozilla.org/en-US/Add-ons/SDK/Tools/jpm" target="_blank">the jpm tool</a>, or by uploading to <a href="https://addons.mozilla.org/en-US/firefox/" target="_blank">AMO</a>.</li>
     </section>
 
     <!-- Testing the browser -->
@@ -825,9 +830,9 @@ document.body.insertBefore(h1, document.body.firstChild);
 
 # Functionally equivalent to the first one
 
-./mach mochitest browser/base/content/test/general/browser_audioTabIcon.js --e10s
+./mach mochitest browser/base/content/test/general/browser_audioTabIcon.js --disable-e10s
 
-# --e10s = Run with out-of-process tabs
+# --disable-e10s = Run without out-of-process tabs
 
 # Check out --help for more options. I like --jsdebugger, --run-until-failure,
 # --no-autorun, and --keep-open
